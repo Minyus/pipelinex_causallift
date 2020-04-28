@@ -1,0 +1,6 @@
+# Kedro DataSets: https://kedro.readthedocs.io/en/latest/kedro.contrib.io.html
+
+/:
+  type: pandas.CSVDataSet
+  # type: pickle.PickleDataSet
+  cached: False

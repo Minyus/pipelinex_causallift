@@ -1,0 +1,30 @@
+
+RUN_CONFIG:
+  pipeline_name: __default__
+  only_missing: True
+  runner: SequentialRunner # None
+  tags: # None
+  node_names: # None
+  from_nodes: # None
+  to_nodes: # None
+  from_inputs: # None
+  load_versions: # None
+
+MLFLOW_LOGGING_CONFIG:
+  uri: sqlite:///mlruns/sqlite.db
+  experiment_name: experiment_001
+  artifact_location: ./mlruns/experiment_001
+  offset_hours: 0
+  logging_artifacts:  # None
+  
+PIPELINES:
+  __default__:
+    =: pipelinex.FlexiblePipeline
+    parameters_in_inputs: False
+    module:  # None
+    decorator: pipelinex.log_time
+    nodes:
+
+      - inputs:
+        func:
+        outputs:
