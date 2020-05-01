@@ -64,8 +64,8 @@ params:
 
 RUN_CONFIG:
   pipeline_name: __default__
-  only_missing: True
-  runner: SequentialRunner # None
+  only_missing: False
+  runner: SequentialRunner
   tags: # None
   node_names: # None
   from_nodes: # None
@@ -83,7 +83,6 @@ MLFLOW_LOGGING_CONFIG:
 PIPELINES:
   __default__:
     =: pipelinex.FlexiblePipeline
-    parameters_in_inputs: False
     module: # None
     decorator: pipelinex.log_time
     nodes:
