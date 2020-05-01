@@ -1,3 +1,66 @@
+params:
+  # Input DataFrame columns
+  cols_features: # None
+  col_treatment: Treatment
+  col_outcome: Outcome
+
+  # Output DataFrame columns
+  col_propensity: Propensity
+  col_proba_if_treated: Proba_if_Treated
+  col_proba_if_untreated: Proba_if_Untreated
+  col_cate: CATE
+  col_recommendation: Recommendation
+  col_weight: Weight
+  index_name: index
+  partition_name: partition
+
+  # Propensity model settings
+  enable_ipw: True
+  min_propensity: 0.01
+  max_propensity: 0.99
+  propensity_model_params:
+    =: sklearn.linear_model.LogisticRegression
+    C: 1.0
+    class_weight: # None
+    dual: False
+    fit_intercept: True
+    intercept_scaling: 1
+    max_iter: 100
+    multi_class: ovr
+    n_jobs: 1
+    penalty: l1
+    solver: liblinear
+    tol: 0.0001
+    warm_start: False
+
+  # Uplift model settings
+  uplift_model_params:
+    =: xgboost.XGBClassifier
+    max_depth: 3
+    learning_rate: 0.1
+    n_estimators: 100
+    verbose: 0
+    objective: "binary:logistic"
+    booster: "gbtree"
+    n_jobs: -1
+    nthread: # None
+    gamma: 0
+    min_child_weight: 1
+    max_delta_step: 0
+    subsample: 1
+    colsample_bytree: 1
+    colsample_bylevel: 1
+    reg_alpha: 0
+    reg_lambda: 1
+    scale_pos_weight: 1
+    base_score: 0.5
+    missing: # None
+
+  # Misc settings
+  seed: 0
+  verbose: 2
+
+# PipelineX settings
 
 RUN_CONFIG:
   pipeline_name: __default__
@@ -15,16 +78,100 @@ MLFLOW_LOGGING_CONFIG:
   experiment_name: experiment_001
   artifact_location: ./mlruns/experiment_001
   offset_hours: 0
-  logging_artifacts:  # None
-  
+  logging_artifacts: # None
+
 PIPELINES:
   __default__:
     =: pipelinex.FlexiblePipeline
     parameters_in_inputs: False
-    module:  # None
+    module: # None
     decorator: pipelinex.log_time
     nodes:
-
-      - inputs:
+      - inputs: # None
         func:
-        outputs:
+          =: pipelinex.ToPipeline
+          _: { $: params }
+        outputs: params
+      # Prepare data
+
+      - inputs: params
+        func: data_prep.sim_data.get_sim_data
+        outputs: input_df
+
+      - inputs: [params, input_df]
+        func: data_prep.split_data.split_data
+        outputs: [train_df, test_df]
+
+      # Prepare for Uplift modeling
+
+      - inputs: params
+        func: pipelinex.to_easydict
+        outputs: args_raw
+
+      - inputs: [args_raw, train_df, test_df]
+        func: causallift.nodes.utils.bundle_train_and_test_data
+        outputs: df_00
+
+      - inputs: [args_raw, df_00]
+        func: causallift.nodes.utils.impute_cols_features
+        outputs: args
+
+      - inputs: [args, df_00]
+        func: causallift.nodes.utils.treatment_fractions_
+        outputs: treatment_fractions
+
+      - inputs: [args, df_00]
+        func: causallift.nodes.estimate_propensity.fit_propensity
+        outputs: propensity_model
+
+      - inputs: [args, df_00, propensity_model]
+        func: causallift.nodes.estimate_propensity.estimate_propensity
+        outputs: df_01
+
+      # estimate_cate_by_2_models
+
+      - inputs: [args, df_01]
+        func: causallift.nodes.model_for_each.model_for_treated_fit
+        outputs: treated__model_dict
+
+      - inputs: [args, df_01]
+        func: causallift.nodes.model_for_each.model_for_untreated_fit
+        outputs: untreated__model_dict
+
+      - inputs: [treated__model_dict, untreated__model_dict]
+        func: causallift.nodes.model_for_each.bundle_treated_and_untreated_models
+        outputs: uplift_models_dict
+
+      - inputs: [args, df_01, uplift_models_dict]
+        func: causallift.nodes.model_for_each.model_for_treated_predict_proba
+        outputs: treated__proba
+
+      - inputs: [args, df_01, uplift_models_dict]
+        func: causallift.nodes.model_for_each.model_for_untreated_predict_proba
+        outputs: untreated__proba
+
+      - inputs: [treated__proba, untreated__proba]
+        func: causallift.nodes.model_for_each.compute_cate
+        outputs: cate_estimated
+
+      - inputs: [args, df_01, cate_estimated, treated__proba, untreated__proba]
+        func: causallift.nodes.model_for_each.add_cate_to_df
+        outputs: df_02
+
+      # [Optional] estimate_recommendation_impact
+
+      - inputs: [args, df_02, treatment_fractions]
+        func: causallift.nodes.utils.recommend_by_cate
+        outputs: df_03
+
+      - inputs: [args, df_03, uplift_models_dict]
+        func: causallift.nodes.model_for_each.model_for_treated_simulate_recommendation
+        outputs: treated__sim_eval_df
+
+      - inputs: [args, df_03, uplift_models_dict]
+        func: causallift.nodes.model_for_each.model_for_untreated_simulate_recommendation
+        outputs: untreated__sim_eval_df
+
+      - inputs: [treated__sim_eval_df, untreated__sim_eval_df]
+        func: causallift.nodes.utils.estimate_effect
+        outputs: estimated_effect_df
