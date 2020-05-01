@@ -1,6 +1,32 @@
-# Kedro DataSets: https://kedro.readthedocs.io/en/latest/kedro.contrib.io.html
+# [reference](https://kedro.readthedocs.io/en/latest/04_user_guide/04_data_catalog.html)
+# [datasets](https://kedro.readthedocs.io/en/latest/kedro.extras.datasets.html)
 
-/:
-  type: pandas.CSVDataSet
-  # type: pickle.PickleDataSet
-  cached: False
+propensity_model:
+  type: pickle.PickleDataSet
+  filepath: data/model/propensity_model.pickle
+
+uplift_models_dict:
+  type: pickle.PickleDataSet
+  filepath: data/model/uplift_models_dict.pickle
+
+df_03:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/df.csv
+  load_args:
+    index_col: [partition, index]
+    float_precision: high
+  save_args:
+    index: True
+    float_format: "%.16e"
+
+treated__sim_eval_df:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/treated__sim_eval_df.csv
+
+untreated__sim_eval_df:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/untreated__sim_eval_df.csv
+
+estimated_effect_df:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/estimated_effect_df.csv
