@@ -1,3 +1,6 @@
+test_size: 0.2
+seed: 0
+
 causallift_params:
   # Input DataFrame columns
   cols_features: # None
@@ -88,11 +91,11 @@ PIPELINES:
     nodes:
       # Prepare data
 
-      - inputs: "params:causallift_params"
+      - inputs: "params:seed"
         func: data_prep.sim_data.get_sim_data
         outputs: input_df
 
-      - inputs: ["params:causallift_params", input_df]
+      - inputs: [input_df, "params:test_size", "params:seed"]
         func: data_prep.split_data.split_data
         outputs: [train_df, test_df]
 
