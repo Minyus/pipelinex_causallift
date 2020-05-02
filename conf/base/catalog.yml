@@ -5,17 +5,51 @@ input_df:
   type: pipelinex.CSVLocalDataSet
   filepath: data/input/input_df.csv
 
+transformed_df:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/transformed_df.csv
+
+df_00:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/df_00.csv
+  load_args:
+    index_col: [partition, index]
+    float_precision: high
+  save_args:
+    index: True
+    float_format: "%.16e"
+
 propensity_model:
   type: pickle.PickleDataSet
   filepath: data/model/propensity_model.pickle
+
+df_01:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/df_01.csv
+  load_args:
+    index_col: [partition, index]
+    float_precision: high
+  save_args:
+    index: True
+    float_format: "%.16e"
 
 uplift_models_dict:
   type: pickle.PickleDataSet
   filepath: data/model/uplift_models_dict.pickle
 
+df_02:
+  type: pipelinex.CSVLocalDataSet
+  filepath: data/load/df_02.csv
+  load_args:
+    index_col: [partition, index]
+    float_precision: high
+  save_args:
+    index: True
+    float_format: "%.16e"
+
 df_03:
   type: pipelinex.CSVLocalDataSet
-  filepath: data/load/df.csv
+  filepath: data/load/df_03.csv
   load_args:
     index_col: [partition, index]
     float_precision: high
