@@ -115,7 +115,7 @@ PIPELINES:
       # Prepare data
 
       - inputs: "params:sim_params"
-        func: data_prep.sim_data.get_sim_data
+        func: data_prep.generate_data.generate_data_
         outputs: input_df
 
       - inputs: [input_df, "params:test_size", "params:seed"]

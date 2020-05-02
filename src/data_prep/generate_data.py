@@ -1,7 +1,7 @@
 from causallift import generate_data
 
 
-def get_sim_data(params):
+def generate_data_(params):
     """
     # Generate simulated data
     # "Sleeping dogs" (a.k.a. "do-not-disturb"; people who will "buy" if not
