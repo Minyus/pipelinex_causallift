@@ -99,7 +99,7 @@ RUN_CONFIG:
   from_inputs: # None
   load_versions: # None
 
-MLFLOW_LOGGING_CONFIG:
+__DISABLE__MLFLOW_LOGGING_CONFIG: # Remove __DISABLE__ to enable
   uri: sqlite:///mlruns/sqlite.db
   experiment_name: experiment_001
   artifact_location: ./mlruns/experiment_001
