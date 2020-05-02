@@ -1,4 +1,7 @@
-def get_sim_data(seed):
+from causallift import generate_data
+
+
+def get_sim_data(params):
     """
     # Generate simulated data
     # "Sleeping dogs" (a.k.a. "do-not-disturb"; people who will "buy" if not
@@ -10,25 +13,6 @@ def get_sim_data(seed):
     in propensity_coef parameter (default).
     # The first element in each list parameter specifies the intercept.
     """
-    from causallift import generate_data
 
-    df = generate_data(
-        N=1000,
-        n_features=3,
-        beta=[0, -2, 3, -5],  # Effect of [intercept and features] on outcome
-        error_std=0.1,
-        tau=[1, -5, -5, 10],  # Effect of [intercept and features] on treated outcome
-        tau_std=0.1,
-        discrete_outcome=True,
-        seed=seed,
-        feature_effect=0,  # Effect of beta on treated outxome
-        propensity_coef=[
-            0,
-            -1,
-            1,
-            -1,
-        ],  # Effect of [intercept and features] on propensity log-odds for treatment
-        index_name="index",
-    )
-
+    df = generate_data(**params)
     return df
