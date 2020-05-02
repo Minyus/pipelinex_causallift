@@ -1,4 +1,4 @@
-params:
+causallift_params:
   # Input DataFrame columns
   cols_features: # None
   col_treatment: Treatment
@@ -86,24 +86,19 @@ PIPELINES:
     module: # None
     decorator: pipelinex.log_time
     nodes:
-      - inputs: # None
-        func:
-          =: pipelinex.ToPipeline
-          _: { $: params }
-        outputs: params
       # Prepare data
 
-      - inputs: params
+      - inputs: "params:causallift_params"
         func: data_prep.sim_data.get_sim_data
         outputs: input_df
 
-      - inputs: [params, input_df]
+      - inputs: ["params:causallift_params", input_df]
         func: data_prep.split_data.split_data
         outputs: [train_df, test_df]
 
       # Prepare for Uplift modeling
 
-      - inputs: params
+      - inputs: "params:causallift_params"
         func: pipelinex.to_easydict
         outputs: args_raw
 
