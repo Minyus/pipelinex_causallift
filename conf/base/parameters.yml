@@ -22,6 +22,8 @@ sim_params:
   feature_effect: 0 # Effect of beta on treated outcome
   propensity_coef: [0, -1, 1, -1] # Effect of [intercept and features] on propensity log-odds for treatment
 
+transform_params: {}
+
 test_size: 0.2
 
 causallift_params:
@@ -118,7 +120,11 @@ PIPELINES:
         func: data_prep.generate_data.generate_data_
         outputs: input_df
 
-      - inputs: [input_df, "params:test_size", "params:seed"]
+      - inputs: [input_df, "params:transform_params"]
+        func: data_prep.transform_data.transform_data
+        outputs: transformed_df
+
+      - inputs: [transformed_df, "params:test_size", "params:seed"]
         func: data_prep.split_data.split_data
         outputs: [train_df, test_df]
 
