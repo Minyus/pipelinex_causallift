@@ -22,13 +22,13 @@ sim_params:
   feature_effect: 0 # Effect of beta on treated outcome
   propensity_coef: [0, -1, 1, -1] # Effect of [intercept and features] on propensity log-odds for treatment
 
-transform_params: {}
+transform_params: {} # Add parameters for data transformation/feature engineering if any.
 
 test_size: 0.2
 
 causallift_params:
   # Input DataFrame columns
-  cols_features: # None
+  cols_features: # None  # List of column names used as features. If None, all the columns except for outcome, propensity, CATE, and recommendation.
   col_treatment: Treatment
   col_outcome: Outcome
 
@@ -44,9 +44,9 @@ causallift_params:
 
   # Propensity model settings
   enable_ipw: True
-  min_propensity: 0.01
-  max_propensity: 0.99
-  propensity_model_params:
+  min_propensity: 0.01 # Minimum propensity score.
+  max_propensity: 0.99 # Maximum propensity score.
+  propensity_model_params: # classifier such as https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
     =: sklearn.linear_model.LogisticRegression
     C: 1.0
     class_weight: # None
@@ -62,7 +62,7 @@ causallift_params:
     warm_start: False
 
   # Uplift model settings
-  uplift_model_params:
+  uplift_model_params: # classifier such as https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.XGBClassifier
     =: xgboost.XGBClassifier
     max_depth: 3
     learning_rate: 0.1
@@ -86,7 +86,7 @@ causallift_params:
 
   # Misc settings
   seed: 0
-  verbose: 2
+  verbose: 2 # How much info to show. 0 to show nothing, 1 to show only warning, 2 to show useful info, 3 to show debug info
 
 # PipelineX settings
 
@@ -114,7 +114,7 @@ PIPELINES:
     module: # None
     decorator: pipelinex.log_time
     nodes:
-      # Prepare data
+      ### Step 0: Prepare data
 
       - inputs: "params:sim_params"
         func: data_prep.generate_data.generate_data_
@@ -128,7 +128,7 @@ PIPELINES:
         func: data_prep.split_data.split_data
         outputs: [train_df, test_df]
 
-      # Prepare for Uplift modeling
+      ### Step 1: Prepare for Uplift modeling and optionally estimate propensity scores using a supervised classification model
 
       - inputs: "params:causallift_params"
         func:
@@ -156,7 +156,7 @@ PIPELINES:
         func: causallift.nodes.estimate_propensity.estimate_propensity
         outputs: df_01
 
-      # estimate_cate_by_2_models
+      ### Step 2: Estimate CATE by 2 supervised classification models
 
       - inputs: [args, df_01]
         func: causallift.nodes.model_for_each.model_for_treated_fit
@@ -186,7 +186,7 @@ PIPELINES:
         func: causallift.nodes.model_for_each.add_cate_to_df
         outputs: df_02
 
-      # [Optional] estimate_recommendation_impact
+      ### Step 3 [Optional] Estimate impact by following recommendation based on CATE
 
       - inputs: [args, df_02, treatment_fractions]
         func: causallift.nodes.utils.recommend_by_cate
