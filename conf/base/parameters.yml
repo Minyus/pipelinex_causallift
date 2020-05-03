@@ -131,7 +131,9 @@ PIPELINES:
       # Prepare for Uplift modeling
 
       - inputs: "params:causallift_params"
-        func: pipelinex.to_easydict
+        func:
+          =: pipelinex.Construct
+          obj: { =: easydict.EasyDict }
         outputs: args_raw
 
       - inputs: [args_raw, train_df, test_df]
