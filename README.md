@@ -17,7 +17,7 @@ $ pip install pipelinex causallift xgboost kedro
 ## 2. Clone this repository and run `main.py`
 
 ```bash
-$ git clone https://github.com/Minyus/pipelinex_causallift
+$ git clone https://github.com/Minyus/pipelinex_causallift.git
 $ cd pipelinex_causallift
 $ python main.py
 ```
