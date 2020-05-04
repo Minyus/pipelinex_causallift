@@ -11,9 +11,13 @@ Please see [CausalLift](https://github.com/Minyus/causallift) for details.
 ## 1. Install dependencies
 
 ```bash
-$ pip3 install pipelinex causallift xgboost kedro mlflow
+$ pip install pipelinex causallift xgboost kedro
 ```
 
-## 2. Clone this repository
+## 2. Clone this repository and run `main.py`
 
-## 3. Run `main.py`
+```bash
+$ git clone https://github.com/Minyus/pipelinex_causallift
+$ cd pipelinex_causallift
+$ python main.py
+```
