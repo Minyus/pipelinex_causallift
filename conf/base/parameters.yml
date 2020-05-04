@@ -86,7 +86,8 @@ causallift_params:
 
   # Misc settings
   seed: 0
-  verbose: 2 # How much info to show. 0 to show nothing, 1 to show only warning, 2 to show useful info, 3 to show debug info
+  verbose: 3 # How much info to show. 0 to show nothing, 1 to show only warning, 2 to show some info, 3 to show more info
+  df_print: to_string # Use pandas.DataFrame.to_string to show output data frames
 
 # PipelineX settings
 
