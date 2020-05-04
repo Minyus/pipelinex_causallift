@@ -21,3 +21,6 @@ $ git clone https://github.com/Minyus/pipelinex_causallift.git
 $ cd pipelinex_causallift
 $ python main.py
 ```
+## Tested environment
+
+- Python 3.6.8
