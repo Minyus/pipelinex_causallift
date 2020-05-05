@@ -173,3 +173,6 @@ catboost_info
 
 # VS Code
 .vscode/
+
+# images
+*.png
