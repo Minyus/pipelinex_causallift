@@ -201,6 +201,6 @@ PIPELINES:
         func: causallift.nodes.model_for_each.model_for_untreated_simulate_recommendation
         outputs: untreated__sim_eval_df
 
-      - inputs: [treated__sim_eval_df, untreated__sim_eval_df]
+      - inputs: [args, treated__sim_eval_df, untreated__sim_eval_df]
         func: causallift.nodes.utils.estimate_effect
         outputs: estimated_effect_df
