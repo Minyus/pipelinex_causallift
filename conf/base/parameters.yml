@@ -18,7 +18,7 @@ sim_params:
   tau: [1, -5, -5, 10] # Effect of [intercept and features] on treated outcome
   tau_std: 0.1
   discrete_outcome: True
-  seed: { $: seed }
+  seed: { $: seed } # Anchor-less aliasing: Look up seed key in this YAML file
   feature_effect: 0 # Effect of beta on treated outcome
   propensity_coef: [0, -1, 1, -1] # Effect of [intercept and features] on propensity log-odds for treatment
 
@@ -85,7 +85,7 @@ causallift_params:
     missing: # None
 
   # Misc settings
-  seed: 0
+  seed: { $: seed } # Anchor-less aliasing: Look up seed key in this YAML file
   verbose: 3 # How much info to show. 0 to show nothing, 1 to show only warning, 2 to show some info, 3 to show more info
   df_print: to_string # Use pandas.DataFrame.to_string to show output data frames
 
