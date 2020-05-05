@@ -157,6 +157,9 @@ PIPELINES:
         func: causallift.nodes.estimate_propensity.estimate_propensity
         outputs: df_01
 
+      - inputs: df_01
+        outputs: propensity_histgram
+
       ### Step 2: Estimate CATE by 2 supervised classification models
 
       - inputs: [args, df_01]

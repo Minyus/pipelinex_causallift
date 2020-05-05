@@ -33,6 +33,13 @@ df_01:
     index: True
     float_format: "%.16e"
 
+propensity_histgram:
+  type: pipelinex.HistgramDataSet
+  filepath: data/eda/propensity_histgram.png
+  save_args: # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.hist.html
+    column: Propensity
+    by: partition
+
 uplift_models_dict:
   type: pickle.PickleDataSet
   filepath: data/model/uplift_models_dict.pickle
