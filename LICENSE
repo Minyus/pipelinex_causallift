@@ -4,6 +4,7 @@ as the main author
 Copyright 2018-2019 QuantumBlack Visual Analytics Limited
 regarding:
 - `.gitignore` copied from https://github.com/quantumblacklabs/kedro/blob/0.15.3/kedro/template/%7B%7B%20cookiecutter.repo_name%20%7D%7D/.gitignore
+- `kedro_cli.py` copied from https://github.com/quantumblacklabs/kedro/blob/develop/kedro/templates/project/%7B%7B%20cookiecutter.repo_name%20%7D%7D/kedro_cli.py
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
