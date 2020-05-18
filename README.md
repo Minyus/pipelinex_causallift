@@ -1,18 +1,20 @@
 # PipelineX CausalLift
 
+An example project using [PipelineX](https://github.com/Minyus/pipelinex), Kedro, and [CausalLift](https://github.com/Minyus/causallift) for Uplift Modeling to find which customers should be targeted and which customers should not for a marketing campaign (treatment).
+
 <p align="center">
-<img src="readme_images/CausalLift_Viz.PNG" width="734" height="465">
+<img src="img/kedro_pipeline.PNG">
+Pipeline visualized by Kedro-viz
 </p>
 
-Example project to use [PipelineX](https://github.com/Minyus/pipelinex) for Uplift Modeling to find which customers should be targeted and which customers should not for a marketing campaign (treatment).
-
-Please see [CausalLift](https://github.com/Minyus/causallift) for details.
 
 ## 1. Install dependencies
 
 ```bash
-$ pip install pipelinex causallift xgboost kedro
+$ pip install pipelinex causallift xgboost kedro mlflow kedro-viz
 ```
+
+Note: `mlflow` and `kedro-viz` are optional.
 
 ## 2. Clone this repository and run `main.py`
 
