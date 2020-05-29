@@ -2,15 +2,15 @@
 # [datasets](https://kedro.readthedocs.io/en/latest/kedro.extras.datasets.html)
 
 input_df:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/input/input_df.csv
 
 transformed_df:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/transformed_df.csv
 
 df_00:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/df_00.csv
   load_args:
     index_col: [partition, index]
@@ -24,7 +24,7 @@ propensity_model:
   filepath: data/model/propensity_model.pickle
 
 df_01:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/df_01.csv
   load_args:
     index_col: [partition, index]
@@ -45,7 +45,7 @@ uplift_models_dict:
   filepath: data/model/uplift_models_dict.pickle
 
 df_02:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/df_02.csv
   load_args:
     index_col: [partition, index]
@@ -55,7 +55,7 @@ df_02:
     float_format: "%.16e"
 
 df_03:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/df_03.csv
   load_args:
     index_col: [partition, index]
@@ -65,13 +65,13 @@ df_03:
     float_format: "%.16e"
 
 treated__sim_eval_df:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/treated__sim_eval_df.csv
 
 untreated__sim_eval_df:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/untreated__sim_eval_df.csv
 
 estimated_effect_df:
-  type: pipelinex.CSVLocalDataSet
+  type: pandas.CSVDataSet
   filepath: data/load/estimated_effect_df.csv
