@@ -49,6 +49,11 @@ loggers:
         level: INFO
         handlers: [console, info_file_handler, error_file_handler]
         propagate: no
+    
+    alembic.runtime.migration:
+        level: WARNING
+        handlers: [console, info_file_handler, error_file_handler]
+        propagate: no
 
 root:
     level: INFO
